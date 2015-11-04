@@ -1,5 +1,5 @@
 var employees = [];
-
+var frozenEmployees = [];
 
 $(document).ready(function(){
     getData();
@@ -91,10 +91,12 @@ function displayTotals(){
 function freezePerson(){
     for(var i = 0; i < employees.length; i++){
         if(employees[i]._id === $(this).data('id')){
-            (employees.splice(i, 1));
+           frozenEmployees.push(employees.splice(i, 1));
+
 
         }
     }
+    console.log(frozenEmployees);
     displayTotals();
 
 }
