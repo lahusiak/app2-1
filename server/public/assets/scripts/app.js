@@ -2,10 +2,10 @@ var employees = [];
 
 
 $(document).ready(function(){
-    console.log("I'm working!");
     getData();
 
-    $('#peopleContainer').on('click', 'button', deletePerson);
+    $('#peopleContainer').on('click', '#delete', deletePerson);
+    $('#peopleContainer').on('click', '#freeze', freezePerson);
 
 });
 
@@ -13,14 +13,12 @@ function deletePerson() {
     employee =[];
     var deletedPerson = {};
   deletedPerson.id = $(this).data('id');
-  //
-  console.log(deletedPerson.id);
+
   $.ajax({
     type: 'DELETE',
     url: '/data',
     data: deletedPerson,
     success: function (data) {
-        console.log("This is deleted data", data);
         getData();
     }
   });
@@ -33,9 +31,8 @@ function getData() {
     //data
     success: function (data) {
       employees = data;
-      console.log(employees);
       appendToDom();
-        displayTotals();
+      displayTotals();
     }
   });
 }
@@ -48,7 +45,8 @@ function appendToDom() {
          '<p class="individual col-md-2">Last Name:' + employees[i].lastName + '</p>' +
          '<p class="individual col-md-2">Salary: ' + employees[i].salary + '</p>' +
          '<p class="individual col-md-2">Years of Service: ' + employees[i].yearsService + '</p>' +
-         '<button class="btn btn-danger col-md-3" data-id="'+employees[i]._id + '"> Delete </p>' +
+         '<button id = "delete" class="btn btn-danger col-md-1" data-id="'+employees[i]._id + '"> Delete </p>' +
+        '<button id = "freeze" class="btn btn-danger col-md-1" data-id="'+employees[i]._id + '"> Freeze </p>'+
       '</div>');
 
   }
@@ -60,7 +58,6 @@ function totalSalary(){
     for (var i = 0; i < employees.length; i++){
        salaryTotal+= parseInt(employees[i].salary);
     }
-    console.log("This is salaryTotal", salaryTotal);
     return salaryTotal;
 }
 
@@ -71,18 +68,35 @@ function averageSalary(){
 function totalYears(){
     var yearsTotal = 0;
     for (var i = 0; i < employees.length; i++){
-        yearsTotal+= parseInt(employees[i].yearsService);
+        yearsTotal += parseInt(employees[i].yearsService);
     }
-    console.log("This is yearsTotal", yearsTotal);
     return yearsTotal;
 }
 
 function averageYears(){
-    return (totalYears()/employees.length);
+
+    return (Math.round((totalYears()/employees.length)*100))/100;
+
 }
 
 function displayTotals(){
-    $('#averageSalary').text(averageSalary());
+    $('#salaryAverage').text(averageSalary());
+    $('#salaryTotal').text(totalSalary());
+    $('#serviceAverage').text(averageYears());
+    $('#yearsTotal').text(totalYears());
+
+
+}
+
+function freezePerson(){
+    for(var i = 0; i < employees.length; i++){
+        if(employees[i]._id === $(this).data('id')){
+            (employees.splice(i, 1));
+
+        }
+    }
+    displayTotals();
+
 }
 
 
