@@ -10,7 +10,9 @@ mongoose.connect('mongodb://localhost/employeeDb');
 
 var Person = mongoose.model('Person', new Schema({'firstName':String, 'lastName':String, 'salary':String, 'yearsService':String}, {collection:'employeeDb'}));
 
-app.set("port", process.env.PORT || 5000);
+app.set("port", process.env.PORT || 4999);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({expanded: true}));
 
 app.route('/data').get(function (req, res) {
               console.log('/data was sent this should show up on the server console');
@@ -19,8 +21,11 @@ app.route('/data').get(function (req, res) {
                   res.send(data);
               });
             })
-            .delete(function () {
-                  //Person.findByIdAndRemove(req.body.id, function(){});
+            .delete(function (req, res) {
+                console.log("/delete was sent this should show up on the server console",req.body.id);
+                  Person.findByIdAndRemove(req.body.id, function(err, data){
+                      res.send(data);
+                  });
             });
 
 app.get("/*", function(req, res){
