@@ -89,11 +89,15 @@ function displayTotals(){
 }
 
 function freezePerson(){
+    frozenEmployees.push($(this).data('id'));
+
+
     for(var i = 0; i < employees.length; i++){
-        if(employees[i]._id === $(this).data('id')){
-           frozenEmployees.push(employees.splice(i, 1));
-
-
+        for(var j = 0 ; j < frozenEmployees.length; i++) {
+            if (employees[i]._id === frozenEmployees[j]) {
+                ///apply freeze
+                employees.splice(i, 1);
+            }
         }
     }
     console.log(frozenEmployees);
@@ -101,4 +105,8 @@ function freezePerson(){
 
 }
 
-
+//if(employees[i]._id === $(this).data('id')){
+//    frozenEmployees.push(employees.splice(i, 1));
+//
+//
+//}
