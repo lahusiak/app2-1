@@ -32,6 +32,7 @@ function getData() {
     success: function (data) {
       employees = data;
       appendToDom();
+        //keepFrozen();
       displayTotals();
     }
   });
@@ -88,25 +89,24 @@ function displayTotals(){
 
 }
 
-function freezePerson(){
-    frozenEmployees.push($(this).data('id'));
-
-
-    for(var i = 0; i < employees.length; i++){
-        for(var j = 0 ; j < frozenEmployees.length; i++) {
-            if (employees[i]._id === frozenEmployees[j]) {
-                ///apply freeze
-                employees.splice(i, 1);
-            }
+function freezePerson() {
+    for (var i = 0; i < employees.length; i++) {
+        if (employees[i]._id === $(this).data('id')) {
+            frozenEmployees.push(employees.splice(i, 1));
+            displayTotals();
         }
     }
-    console.log(frozenEmployees);
-    displayTotals();
-
 }
 
-//if(employees[i]._id === $(this).data('id')){
-//    frozenEmployees.push(employees.splice(i, 1));
-//
-//
+//Could not get function too work. There was a bug that made it so that a frozen employee would reset when the delete button was clicked.
+
+//function keepFrozen(){
+//    for(var i = 0; i < frozenEmployees.length; i++){
+//        for(var j = 0 ; j < employees.length; i++) {
+//            if (frozenEmployees[i] == employees[j]._id) {
+//                employees.splice(i, 1);
+//                return console.log(frozenEmployees);
+//            }
+//        }
+//    }
 //}
